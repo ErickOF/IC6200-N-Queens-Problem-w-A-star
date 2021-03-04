@@ -12,3 +12,19 @@ open_list.append(matrix[0][0])
 print(open_list)
 
 
+done = False
+
+
+def main():
+    while(1):
+        enter = input(_c.ENTER_MSG)
+
+        if enter == '':
+            print("ENTER...")
+
+        elif enter == 'q':
+            print(_c.EXIT_MSG)
+            break
+
+
+main()
