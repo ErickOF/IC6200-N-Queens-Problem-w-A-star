@@ -1,12 +1,20 @@
 # IC6200-N-Queens-Problem-w-A-star
 N-Queens Problem solved using A* algorithm
 
+# Required
+numpy : https://numpy.org/install/
+
+-----------------------------------
 # Element props
 ```python
+ID: identity
+F: feed
+Q: queen
+R: restriction
 ###########
 # ID    F #
-#    P    #
-# G     H #
+#         #
+# Q     R #
 ###########
 ```
 
