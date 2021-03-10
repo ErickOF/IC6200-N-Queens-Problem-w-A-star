@@ -38,6 +38,7 @@ def printMatrixQueens(showRestrictions=False):
         print('\n')
 
 def printMatrixFeed():
+    print('\n')
     for i in range(_c.N):
         print('| ', end='')
         for j in range(_c.N):
@@ -228,7 +229,6 @@ def main():
     # getRestrictions_TEST()
 
     while(1):
-        iterations += 1
 
         print(_co.bcolors.OKCYAN + "\nIteration : " +
               str(iterations) + '\n' + _co.bcolors.ENDC)
@@ -238,24 +238,20 @@ def main():
         enter = input(_c.ENTER_MSG)
 
         if enter == '':
+            iterations += 1
             list_without_RQ = getCellsWithOutRestritionOrQueen()
             list_Ids = getIDs_V2(list_without_RQ)
             setFeed(list_Ids)
 
             sortListByFeed = sorfListByFeed(list_without_RQ)
-            #TODO Get all object or change struct of open_list
 
-            # if(len(open_list) == 0):
-            #     myCell = sortListByFeed[0]
+            if(len(open_list) == 0):
+                for a in sortListByFeed:
+                    open_list.insert(len(open_list), [a])
+            
+            myCell = open_list[0][-1]
 
-            #     for a in sortListByFeed:
-            #         addItemOpenList(a)
-
-            #         print('getIDs_V2(open_list) ', getIDs_V2(open_list))
-            # else:
-            #     myCell = open_list[0]
-
-            myCell = sortListByFeed[0]
+            print('\nopen_list', myCell)
         
             currentPos = myCell['POS']
 
@@ -268,8 +264,18 @@ def main():
             restrictions = getRestrictions()
             setRestriction(restrictions)
 
+            #TODO Generate new path and add to current Node, to end.
+
             # printMatrixExtraInfo()
             # printMatrixFeed()
+
+            # TODO : REMOVE FIRST ELEMENT
+
+            if(len(open_list) > 0):
+                del open_list[0]
+            else:
+                print('Open List Empty..... Final')
+                break
 
         elif enter == 'q':
             print(_c.EXIT_MSG)
@@ -286,3 +292,5 @@ def main():
 
 
 main()
+
+
