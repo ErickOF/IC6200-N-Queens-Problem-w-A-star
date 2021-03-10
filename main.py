@@ -37,13 +37,15 @@ def printMatrixQueens(showRestrictions=False):
                 print('  ', end='| ')
         print('\n')
 
+
 def printMatrixFeed():
     print('\n')
     for i in range(_c.N):
         print('| ', end='')
         for j in range(_c.N):
             cell = matrix[i][j]
-            print(_co.bcolors.WARNING + str(cell['F']) + ' ' + _co.bcolors.ENDC, end='| ')
+            print(_co.bcolors.WARNING +
+                  str(cell['F']) + ' ' + _co.bcolors.ENDC, end='| ')
         print('\n')
 
 
@@ -190,7 +192,6 @@ def getRestrictions():
 
     # print('cols\t\t ', _co.bcolors.OKGREEN, matrix[:, col], _co.bcolors.ENDC)
 
-
     diagonals = getDiagonals(np.flipud(matrix), (row, col))
     diag_1 = getIDs(diagonals[0])
     diag_2 = getIDs(diagonals[1])
@@ -199,6 +200,7 @@ def getRestrictions():
     list_restrictions.sort()
     # print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']), "🚀 list_restrictions", list_restrictions)
     return list_restrictions
+
 
 def getRestrictions_TEST():
     for i in range(_c.N):
@@ -217,6 +219,7 @@ def getRestrictions_TEST():
             list_restrictions = cols + rows + diag_1 + diag_2
             list_restrictions.sort()
             # print("🚀", str(matrix[i][j]['ID']), "🚀 list_restrictions", list_restrictions, '\n')
+
 
 def main():
     iterations = 0
@@ -248,11 +251,13 @@ def main():
             if(len(open_list) == 0):
                 for a in sortListByFeed:
                     open_list.insert(len(open_list), [a])
-            
-            myCell = open_list[0][-1]
 
-            print('\nopen_list', myCell)
-        
+            myCell = open_list[0][-1]
+            print('\myCell', myCell)
+
+            closed_list.insert(len(closed_list), open_list[0])
+            print('\closed_list', closed_list)
+
             currentPos = myCell['POS']
 
             global row, col
@@ -264,12 +269,8 @@ def main():
             restrictions = getRestrictions()
             setRestriction(restrictions)
 
-            #TODO Generate new path and add to current Node, to end.
-
-            # printMatrixExtraInfo()
+            printMatrixExtraInfo()
             # printMatrixFeed()
-
-            # TODO : REMOVE FIRST ELEMENT
 
             if(len(open_list) > 0):
                 del open_list[0]
@@ -277,20 +278,16 @@ def main():
                 print('Open List Empty..... Final')
                 break
 
+            print('\open_list', open_list)
+
+            # TODO Generate new path and add to current Node, to end.
+            # TODO Validate new path on Closed List
+            # TODO Check if with Have 6 Queens, by length of last item on Closes List
+
         elif enter == 'q':
             print(_c.EXIT_MSG)
             currentCell = getFirstItemOpenList()
-
-            # global row, col
-            # # row = currentPos[0]
-            # # col = currentPos[1]
-            # row = 5
-            # col = 5
-            # getRestrictions()
-
             break
 
 
 main()
-
-
