@@ -13,15 +13,7 @@ tentative_routes_list = _c.EMPTY_LIST.copy()
 row = -1
 col = -1
 
-
-def getCellsWithOutRestritionOrQueen():
-    listWithOutRestrictionOrQueen = []
-    for i in range(_c.N):
-        for j in range(_c.N):
-            cell = matrix[i][j]
-            if(cell['R'] == 0 and cell['Q'] == 0):
-                listWithOutRestrictionOrQueen.append(cell)
-    return listWithOutRestrictionOrQueen
+# ____ PRINTS ____
 
 
 def printMatrixQueens(showRestrictions=False):
@@ -59,28 +51,47 @@ def printMatrixExtraInfo():
         print('\n')
 
 
+def printClosedList():
+    print('Closed List : [', end='')
+
+    for item in closed_list:
+        if(type(item) is list):
+            for i_ in item:
+                print(str(i_['ID']) + ',', end='')
+        else:
+            print(str(item['ID']) + ',', end='')
+    print(']')
+
+
+def printOpenList():
+    print('Open List : [', end='')
+
+    for item in open_list:
+        if(type(item) is list):
+            for i_ in item:
+                print(str(i_['ID']) + ',', end='')
+        else:
+            print(str(item['ID']) + ',', end='')
+    print(']')
+
+# ____ SETS ____
+
+
 def setQueen(x, y):
-    print('setQueen', end=' ')
+    # print('setQueen', end=' ')
     matrix[x][y]['Q'] = 1
 
 
 def setRestriction(restrictions_list=[]):
-    print('setRestriction', end=' ')
+    # print('setRestriction', end=' ')
     for i in range(_c.N):
         for j in range(_c.N):
             if(matrix[i][j]['ID'] in restrictions_list):
                 matrix[i][j]['R'] = 1
 
 
-# def updateFeed(restrictions_list=[]):
-#     print('updateFeed')
-#     for i in range(_c.N):
-#         for j in range(_c.N):
-#             if(matrix[i][j]['ID'] in restrictions_list):
-#                 matrix[i][j]['F'] += 1
-
 def setFeed(restrictions_list=[]):
-    print('setFeed', end=' ')
+    # print('setFeed', end=' ')
     for i in range(_c.N):
         for j in range(_c.N):
             if(matrix[i][j]['ID'] in restrictions_list):
@@ -89,38 +100,17 @@ def setFeed(restrictions_list=[]):
                 # print('ID> ', matrix[i][j]['ID'], ' [', length, ']')
                 matrix[i][j]['F'] = length
 
-
-def sorfListByFeed(feedList):
-    print('sorfListByFeed', end=' ')
-    feedList.sort(key=lambda x: x['F'])
-    return feedList
+# ____ GETS ____
 
 
-def addItemClosesList(closedNode):
-    print('closedNode ', closedNode, end='')
-    closed_list.append(closedNode)
-
-
-def addItemOpenList(newNode):
-    print('newNode ', newNode, end='')
-    open_list.insert(0, newNode)
-
-
-def getFirstItemOpenList():
-    if(open_list == _c.EMPTY_LIST):
-        return _c.EMPTY_CELL
-    else:
-        return open_list[0]
-
-
-def checkIfExistsOnClosedList():
-    result = all(elem in [8, 9, 4, 6, 5, 1] for elem in [1, 5, 4, 6, 8, 9])
-    if result:
-        print('Yes, list1 contains all elements in list2', end='')
-        return True
-    else:
-        print('No, list1 does not contains all elements in list2', end='')
-        return False
+def getCellsWithOutRestritionOrQueen():
+    listWithOutRestrictionOrQueen = []
+    for i in range(_c.N):
+        for j in range(_c.N):
+            cell = matrix[i][j]
+            if(cell['R'] == 0 and cell['Q'] == 0):
+                listWithOutRestrictionOrQueen.append(cell)
+    return listWithOutRestrictionOrQueen
 
 
 def getDiagonals(matrix, pos):
@@ -182,10 +172,10 @@ def getEndangeredCells(i, j):
 
 
 def getRestrictions():
-    print('Row [', row, '] Column [', col, ']')
+    # print('Row [', row, '] Column [', col, ']')
 
-    print('ID\t\t ' + _co.bcolors.OKGREEN +
-          str(matrix[row][col]['ID']) + _co.bcolors.ENDC)
+    # print('ID\t\t ' + _co.bcolors.OKGREEN +
+    #       str(matrix[row][col]['ID']) + _co.bcolors.ENDC)
 
     cols = getIDs(matrix[:, col])
     rows = getIDs(matrix[row, :])
@@ -202,23 +192,37 @@ def getRestrictions():
     return list_restrictions
 
 
-def getRestrictions_TEST():
-    for i in range(_c.N):
-        for j in range(_c.N):
-            # print('ID\t\t ' + _co.bcolors.OKGREEN + str(matrix[i][j]['ID']) + _co.bcolors.ENDC)
+# ____ SORT ____
+def sortListByFeed(feedList):
+    # print('sortListByFeed', end=' ')
+    feedList.sort(key=lambda x: x['F'])
+    return feedList
 
-            cols = getIDs(matrix[:, j])
-            rows = getIDs(matrix[i, :])
+# ____ ADDS ____
 
-            # print('cols\t\t ', _co.bcolors.FAIL, matrix[:, j], _co.bcolors.ENDC)
 
-            diagonals = getDiagonals(np.flipud(matrix), (i, j))
-            diag_1 = getIDs(diagonals[0])
-            diag_2 = getIDs(diagonals[1])
+def addItemClosesList(closedNode):
+    print('closedNode ', closedNode, end='')
+    closed_list.append(closedNode)
 
-            list_restrictions = cols + rows + diag_1 + diag_2
-            list_restrictions.sort()
-            # print("🚀", str(matrix[i][j]['ID']), "🚀 list_restrictions", list_restrictions, '\n')
+
+def addItemOpenList(newNode):
+    print('newNode ', newNode, end='')
+    open_list.insert(0, newNode)
+
+# ____ VALIDATIONS ____
+
+
+def checkIfExistsOnClosedList():
+    result = all(elem in [8, 9, 4, 6, 5, 1] for elem in [1, 5, 4, 6, 8, 9])
+    if result:
+        print('Yes, list1 contains all elements in list2', end='')
+        return True
+    else:
+        print('No, list1 does not contains all elements in list2', end='')
+        return False
+
+# ____ MAIN ____
 
 
 def main():
@@ -228,8 +232,6 @@ def main():
 
     print(_co.bcolors.BOLD + 'ID' + '-' + 'Q' + '-' + 'R' +
           '-' + 'F' + '-' + _co.bcolors.ENDC, end='| ')
-
-    # getRestrictions_TEST()
 
     while(1):
 
@@ -242,21 +244,22 @@ def main():
 
         if enter == '':
             iterations += 1
-            list_without_RQ = getCellsWithOutRestritionOrQueen()
-            list_Ids = getIDs_V2(list_without_RQ)
-            setFeed(list_Ids)
+            list_without_RQ = getCellsWithOutRestritionOrQueen()  # Step 1
 
-            sortListByFeed = sorfListByFeed(list_without_RQ)
+            list_Ids = getIDs_V2(list_without_RQ)
+            setFeed(list_Ids)  # Step 2
+
+            s = sortListByFeed(list_without_RQ)
 
             if(len(open_list) == 0):
-                for a in sortListByFeed:
+                for a in s:
                     open_list.insert(len(open_list), [a])
 
             myCell = open_list[0][-1]
-            print('\myCell', myCell)
+            print('Current Cell', myCell)
 
             closed_list.insert(len(closed_list), open_list[0])
-            print('\closed_list', closed_list)
+            # print('\closed_list', closed_list)
 
             currentPos = myCell['POS']
 
@@ -269,7 +272,7 @@ def main():
             restrictions = getRestrictions()
             setRestriction(restrictions)
 
-            printMatrixExtraInfo()
+            # printMatrixExtraInfo()
             # printMatrixFeed()
 
             if(len(open_list) > 0):
@@ -278,15 +281,20 @@ def main():
                 print('Open List Empty..... Final')
                 break
 
-            print('\open_list', open_list)
+            printOpenList()
+            printClosedList()
 
-            # TODO Generate new path and add to current Node, to end.
+            newDecendents = getCellsWithOutRestritionOrQueen()
+            print('New Decendents', getIDs_V2(newDecendents))
+
+            print('Sort New Decendents', getIDs_V2(sortListByFeed(newDecendents)))
+
+            # TODO Generate new path and add to current Node, to start.
             # TODO Validate new path on Closed List
             # TODO Check if with Have 6 Queens, by length of last item on Closes List
 
         elif enter == 'q':
             print(_c.EXIT_MSG)
-            currentCell = getFirstItemOpenList()
             break
 
 
