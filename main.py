@@ -134,8 +134,8 @@ def resetMatrix(followCell):
                             'POS': matrix[i][a]['POS'], 'F': 0, 'Q': 0, 'R': 0}
             # m = [a.copy() for a in matrix]
     # TODO: set news Queens and set Restrictions
-    printMatrixExtraInfo()
-    print(getIDs_V2(followCell))
+    # printMatrixExtraInfo()
+    # print(getIDs_V2(followCell))
 
     for queen in followCell:
         print('>> ', queen['ID'], ' (', queen['POS'][0], ', ',queen['POS'][1], ')')
@@ -144,7 +144,7 @@ def resetMatrix(followCell):
     printMatrixQueens(True)
 
     restrictions = getRestrictions()
-    print('restrictions : ', restrictions)
+    print('<><><><><><><><><> >> restrictions : \n', restrictions)
     setRestriction(restrictions)
 
 # ____ SETS ____
@@ -239,15 +239,21 @@ def getEndangeredCells(i, j):
 
 def getRestrictions():
     cols = getIDs(matrix[:, col])
+    print('cols > ', cols)
     rows = getIDs(matrix[row, :])
+    print('rows > ', rows)
 
     diagonals = getDiagonals(np.flipud(matrix), (row, col))
     diag_1 = getIDs(diagonals[0])
+    print('diag_1 > ', diag_1)
     diag_2 = getIDs(diagonals[1])
+    print('diag_2 > ', diag_2)
 
-    list_restrictions = cols + rows + diag_1 + diag_2
+    list_restrictions = cols + rows + diag_1 + diag_2 #ANALIZAR SUMAS DE ARRAYS
+    print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']), "🚀 list_restrictions", list_restrictions)
+
     list_restrictions.sort()
-    # print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']), "🚀 list_restrictions", list_restrictions)
+    print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']), "🚀 list_restrictions.sort()", list_restrictions)
     return list_restrictions
 
 
@@ -383,10 +389,12 @@ def main():
             print(bc.HEADER + 'Candites '+ bc.ENDC, end=': ')
             printList(candidates)
 
-            bb = listNewsNodes.copy()[::-1]
-
-            for b in bb:
-                open_list.insert(0, b)
+            for cand in candidates:
+                result = all(elem in cand for elem in open_list)
+                if (result == False):
+                    open_list.insert(0, cand)
+                else:
+                    print('Canditado en lista de abierto, no se tomara en cuanta.......')
 
             # printOpenList()
             print(bc.OKGREEN + 'Queens : ' + bc.ENDC, str(queens))
