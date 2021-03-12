@@ -283,16 +283,36 @@ def addItemOpenList(newNode):
     open_list.insert(0, newNode)
 
 # ____ VALIDATIONS ____
+def checkIfExistsOnClosedList(candidates):
+
+     for cand in candidates:
+        result = all(elem in cand for elem in open_list)
+        if (result == False):
+            open_list.insert(0, cand)
+        else:
+            print(
+                'Canditado en lista de abierto, no se tomara en cuanta.......')
+
+    # for cand_ in candidates:
+    #     cand = sorted(getIDs_V2(cand_))
+
+    #     for closeItem in closed_list:
+
+    #         odlRouter = sorted(getIDs_V2(closeItem))
+
+    #         print('<<<<<<>>>>>>>')
+    #         print('cand ----', cand)
+    #         print('closeItem ----', odlRouter)
+    #         print('<<<<<<>>>>>>>')
+
+    #         if cand == odlRouter:
+    #             print(bc.FAIL + "\n--------------------------------->" + bc.ENDC + " Canditado Conocido ", end='')
+    #         else:
+    #             open_list.insert(0, cand_)
+    #             print('Canditado Desconocido <---------------------------------')
 
 
-def checkIfExistsOnClosedList():
-    result = all(elem in [8, 9, 4, 6, 5, 1] for elem in [1, 5, 4, 6, 8, 9])
-    if result:
-        print('Yes, list1 contains all elements in list2', end='')
-        return True
-    else:
-        print('No, list1 does not contains all elements in list2', end='')
-        return False
+
 
 # ____ MAIN ____
 
@@ -317,6 +337,7 @@ def main():
 
                 iterations_loop = enter - 1
                 while(iterations_loop >= 0 and done == False):
+
                     iterations += 1
                     iterations_loop -= 1
                     list_without_RQ = getCellsWithOutRestritionOrQueen()  # Step 1
@@ -402,25 +423,27 @@ def main():
                     # print(bc.HEADER + 'Candites ' + bc.ENDC, end=': ')
                     # printList(candidates[::-1])
 
-                    for cand in candidates:
-                        result = all(elem in cand for elem in open_list)
-                        if (result == False):
-                            open_list.insert(0, cand)
-                        else:
-                            print(
-                                'Canditado en lista de abierto, no se tomara en cuanta.......')
+                    checkIfExistsOnClosedList(candidates)
+
+                    # for cand in candidates:
+                    #     result = all(elem in cand for elem in open_list)
+                    #     if (result == False):
+                    #         open_list.insert(0, cand)
+                    #     else:
+                    #         print(
+                    #             'Canditado en lista de abierto, no se tomara en cuanta.......')
 
                     print(bc.OKGREEN + 'Queens : ' + bc.ENDC, str(queens))
+
+                    printMatrixQueens(showRestrictions)
 
                     if(queens == 6):
                         print(bc.FAIL + "\nCurrent Trajectory :" +
                               bc.ENDC + " ", end='')
                         print(getIDs_V2(followCell), '\n')
+                        print('Final Iteration', iterations)
                         done = True
 
-            # elif enter == 'q':
-            #     print(_c.EXIT_MSG)
-            #     break
         except:
             print(_c.EXIT_MSG)
             break
