@@ -206,8 +206,10 @@ def getEndangeredCells(i, j):
     list_restrictions = diag_1 + diag_2
     return len(list_restrictions)
 
+
 def removeDuplicates(array):
-  return list(dict.fromkeys(array))
+    return list(dict.fromkeys(array))
+
 
 def getALLRestrictions():
     list_restrictions = []
@@ -232,12 +234,13 @@ def getALLRestrictions():
 
                 list_restrictions.sort()
                 # print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']), "🚀 list_restrictions.sort()", list_restrictions)
-    #remove repetidos
+    # remove repetidos
     # print('list_restrictions: ', list_restrictions, end='')
     listWithOutDuplicates = removeDuplicates(list_restrictions)
     # print('listWithOutDuplicates: ', listWithOutDuplicates, end='')
 
     return listWithOutDuplicates
+
 
 def getRestrictions():
     cols = getIDs(matrix[:, col])
@@ -307,23 +310,15 @@ def main():
 
         printMatrixQueens(showRestrictions)
 
-
         try:
             enter = int(input(_c.ENTER_MSG))
 
             if(type(enter) == int):
 
                 iterations_loop = enter - 1
-                while(iterations_loop>=0 and done == False):
-                    iterations_loop -= 1
-                    # if(sortDecendents == []):
-                    #     print(bc.OKGREEN + "RESET\n" + bc.ENDC)
-                    #     # resetMatrix(closed_list[-2])
-                    #     resetMatrix(followCell)
-
-                    #     # printMatrixExtraInfo()
-
+                while(iterations_loop >= 0 and done == False):
                     iterations += 1
+                    iterations_loop -= 1
                     list_without_RQ = getCellsWithOutRestritionOrQueen()  # Step 1
 
                     list_Ids = getIDs_V2(list_without_RQ)
@@ -356,7 +351,8 @@ def main():
                     # printMatrixExtraInfo()
                     # printMatrixFeed()
 
-                    print(under_green + "\nCurrent Trajectory :" + bc.ENDC + " ", end='')
+                    print(under_green + "\nCurrent Trajectory :" +
+                          bc.ENDC + " ", end='')
                     print(getIDs_V2(open_list[0]), '\n')
 
                     followCell = closed_list[-1]  # Array
@@ -417,7 +413,8 @@ def main():
                     print(bc.OKGREEN + 'Queens : ' + bc.ENDC, str(queens))
 
                     if(queens == 6):
-                        print(bc.FAIL + "\nCurrent Trajectory :" + bc.ENDC + " ", end='')
+                        print(bc.FAIL + "\nCurrent Trajectory :" +
+                              bc.ENDC + " ", end='')
                         print(getIDs_V2(followCell), '\n')
                         done = True
 
@@ -427,6 +424,7 @@ def main():
         except:
             print(_c.EXIT_MSG)
             break
+
 
 start_time = time.time()
 main()
