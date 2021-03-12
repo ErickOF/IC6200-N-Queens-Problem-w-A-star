@@ -53,14 +53,15 @@ def printMatrixExtraInfo():
                   str(cell['R']) + '-' + str(cell['F']) + '-' + bc.ENDC, end='| ')
         print('\n')
 
+
 def printList(listToPrint):
-    print(bc.HEADER + '['+ bc.ENDC, end='')
+    print(bc.HEADER + '[' + bc.ENDC, end='')
 
     lenList = len(listToPrint)
     counter_ = 0
     for item in listToPrint:
         counter_ += 1
-        print(bc.HEADER + '['+ bc.ENDC, end='')
+        print(bc.HEADER + '[' + bc.ENDC, end='')
         lenItem = len(item)
         count_list = 0
         for i_ in item:
@@ -71,58 +72,12 @@ def printList(listToPrint):
                 print(', ', end='')
 
         if(lenList != counter_):
-            # print('], ', end='')
-            print(bc.HEADER + ']'+ bc.ENDC+', ', end='')
+            print(bc.HEADER + ']' + bc.ENDC+', ', end='')
 
-        
         else:
-            # print(']', end='')
-            print(bc.HEADER + ']'+ bc.ENDC, end='')
+            print(bc.HEADER + ']' + bc.ENDC, end='')
 
-
-    # print(']')
-    print(bc.HEADER + ']'+ bc.ENDC, end='\n\n')
-
-
-def printClosedList():
-
-    print('Closed List : [', end='')
-
-    lenClosedList = len(closed_list)
-    counter_ = 0
-    for item in closed_list:
-        counter_ += 1
-        print('[', end='')
-        lengthClosedList = len(item)
-        count_closed_list = 0
-        for i_ in item:
-            print(str(i_['ID']), end='')
-            count_closed_list += 1
-
-            if(lengthClosedList != count_closed_list):
-                print(', ', end='')
-
-        if(lenClosedList != counter_):
-            print('], ', end='')
-        
-        else:
-            print(']', end='')
-
-    print(']')
-
-
-def printOpenList():
-    print('Open List : [', end='')
-
-    for item in open_list:
-        if(type(item) is list):
-            print('[', end='')
-            for i_ in item:
-                print(str(i_['ID']) + ',', end='')
-            print(']', end=',')
-        else:
-            print(str(item['ID']) + ',', end='')
-    print(']')
+    print(bc.HEADER + ']' + bc.ENDC, end='\n\n')
 
 # ____ RE-SETS ____
 
@@ -131,14 +86,17 @@ def resetMatrix(followCell):
     for i in range(_c.N):
         for a in range(_c.N):
             matrix[i][a] = {'ID': matrix[i][a]['ID'],
-                            'POS': matrix[i][a]['POS'], 'F': 0, 'Q': 0, 'R': 0}
-            # m = [a.copy() for a in matrix]
+                            'POS': matrix[i][a]['POS'],
+                            'F': 0,
+                            'Q': 0,
+                            'R': 0}
     # TODO: set news Queens and set Restrictions
     # printMatrixExtraInfo()
     # print(getIDs_V2(followCell))
 
     for queen in followCell:
-        print('>> ', queen['ID'], ' (', queen['POS'][0], ', ',queen['POS'][1], ')')
+        print('>> ', queen['ID'], ' (', queen['POS']
+              [0], ', ', queen['POS'][1], ')')
         setQueen(queen['POS'][0], queen['POS'][1])
 
     printMatrixQueens(True)
@@ -146,6 +104,9 @@ def resetMatrix(followCell):
     restrictions = getRestrictions()
     print('<><><><><><><><><> >> restrictions : \n', restrictions)
     setRestriction(restrictions)
+
+    printMatrixQueens(True)
+
 
 # ____ SETS ____
 
@@ -249,11 +210,13 @@ def getRestrictions():
     diag_2 = getIDs(diagonals[1])
     print('diag_2 > ', diag_2)
 
-    list_restrictions = cols + rows + diag_1 + diag_2 #ANALIZAR SUMAS DE ARRAYS
-    print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']), "🚀 list_restrictions", list_restrictions)
+    list_restrictions = cols + rows + diag_1 + diag_2  # ANALIZAR SUMAS DE ARRAYS
+    print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']),
+          "🚀 list_restrictions", list_restrictions)
 
     list_restrictions.sort()
-    print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']), "🚀 list_restrictions.sort()", list_restrictions)
+    print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']),
+          "🚀 list_restrictions.sort()", list_restrictions)
     return list_restrictions
 
 
@@ -344,25 +307,29 @@ def main():
             # printMatrixExtraInfo()
             # printMatrixFeed()
 
+            print(under_green + "Current Trajectory :" + bc.ENDC + " ", end='')
+            print(getIDs_V2(open_list[0]), '\n')
+
             if(len(open_list) > 0):
                 del open_list[0]
             else:
                 print('Open List Empty..... Final')
                 break
 
-            print(under_green+ "Current Cell : " + str(myCell['ID']) + '\n' + bc.ENDC)
+            print(under_green + "Current Cell :" + bc.ENDC + ' ' +
+                  str(myCell['ID']) + '\n')
 
-            print(bc.HEADER + 'Open List '+ bc.ENDC, end=': ')
+            print(bc.HEADER + 'Open List ' + bc.ENDC, end=': ')
             printList(open_list)
 
-            print(bc.HEADER + 'Closed List '+ bc.ENDC, end=': ')
+            print(bc.HEADER + 'Closed List ' + bc.ENDC, end=': ')
             printList(closed_list)
 
             newDecendents = getCellsWithOutRestritionOrQueen()
-            print('New Decendents', getIDs_V2(newDecendents))
+            # print('New Decendents', getIDs_V2(newDecendents))
 
             sortDecendents = sortListByFeed(newDecendents)
-            print('Sort New Decendents', getIDs_V2(sortDecendents))
+            # print('Sort New Decendents', getIDs_V2(sortDecendents))
 
             followCell = closed_list[-1]  # Array
 
@@ -386,17 +353,17 @@ def main():
             candidates = listNewsNodes.copy()[::-1]
             # print("🚀 ~ file: main.py ~ line 318 ~ candidates", candidates)
 
-            print(bc.HEADER + 'Candites '+ bc.ENDC, end=': ')
-            printList(candidates)
+            print(bc.HEADER + 'Candites ' + bc.ENDC, end=': ')
+            printList(candidates[::-1])
 
             for cand in candidates:
                 result = all(elem in cand for elem in open_list)
                 if (result == False):
                     open_list.insert(0, cand)
                 else:
-                    print('Canditado en lista de abierto, no se tomara en cuanta.......')
+                    print(
+                        'Canditado en lista de abierto, no se tomara en cuanta.......')
 
-            # printOpenList()
             print(bc.OKGREEN + 'Queens : ' + bc.ENDC, str(queens))
 
         elif enter == 'q':
