@@ -1,5 +1,5 @@
+import time
 import numpy as np
-
 import constants as _c
 
 from colors import bcolors as bc
@@ -307,121 +307,127 @@ def main():
 
         printMatrixQueens(showRestrictions)
 
-        enter = input(_c.ENTER_MSG)
 
-        if enter == '':
+        try:
+            enter = int(input(_c.ENTER_MSG))
 
-            iterations_loop = 1200
-            while(iterations_loop>=0 and done == False):
-                iterations_loop -= 1
-                # if(sortDecendents == []):
-                #     print(bc.OKGREEN + "RESET\n" + bc.ENDC)
-                #     # resetMatrix(closed_list[-2])
-                #     resetMatrix(followCell)
+            if(type(enter) == int):
 
-                #     # printMatrixExtraInfo()
+                iterations_loop = enter - 1
+                while(iterations_loop>=0 and done == False):
+                    iterations_loop -= 1
+                    # if(sortDecendents == []):
+                    #     print(bc.OKGREEN + "RESET\n" + bc.ENDC)
+                    #     # resetMatrix(closed_list[-2])
+                    #     resetMatrix(followCell)
 
-                iterations += 1
-                list_without_RQ = getCellsWithOutRestritionOrQueen()  # Step 1
+                    #     # printMatrixExtraInfo()
 
-                list_Ids = getIDs_V2(list_without_RQ)
-                setFeed(list_Ids)  # Step 2
+                    iterations += 1
+                    list_without_RQ = getCellsWithOutRestritionOrQueen()  # Step 1
 
-                s = sortListByFeed(list_without_RQ)
+                    list_Ids = getIDs_V2(list_without_RQ)
+                    setFeed(list_Ids)  # Step 2
 
-                if(len(open_list) == 0):
-                    for a in s:
-                        open_list.insert(len(open_list), [a])
+                    s = sortListByFeed(list_without_RQ)
 
-                myCell = open_list[0][-1]
-                # print('Current Cell', myCell)
+                    if(len(open_list) == 0):
+                        for a in s:
+                            open_list.insert(len(open_list), [a])
 
-                queens = len(open_list[0])
+                    myCell = open_list[0][-1]
+                    # print('Current Cell', myCell)
 
-                closed_list.insert(len(closed_list), open_list[0])
+                    queens = len(open_list[0])
 
-                currentPos = myCell['POS']
+                    closed_list.insert(len(closed_list), open_list[0])
 
-                global row, col
-                row = currentPos[0]
-                col = currentPos[1]
+                    currentPos = myCell['POS']
 
-                setQueen(row, col)
+                    global row, col
+                    row = currentPos[0]
+                    col = currentPos[1]
 
-                restrictions = getRestrictions()
-                setRestriction(restrictions)
+                    setQueen(row, col)
 
-                # printMatrixExtraInfo()
-                # printMatrixFeed()
-
-                print(under_green + "\nCurrent Trajectory :" + bc.ENDC + " ", end='')
-                print(getIDs_V2(open_list[0]), '\n')
-
-                followCell = closed_list[-1]  # Array
-
-                if(sortDecendents == []):
-                    print(bc.OKGREEN + "RESET\n" + bc.ENDC)
-                    # resetMatrix(closed_list[-2])
-                    resetMatrix(followCell)
+                    restrictions = getRestrictions()
+                    setRestriction(restrictions)
 
                     # printMatrixExtraInfo()
+                    # printMatrixFeed()
 
-                if(len(open_list) > 0):
-                    del open_list[0]
-                else:
-                    print('Open List Empty..... Final')
-                    break
+                    print(under_green + "\nCurrent Trajectory :" + bc.ENDC + " ", end='')
+                    print(getIDs_V2(open_list[0]), '\n')
 
-                # print(under_green + "Current Cell :" + bc.ENDC + ' ' +
-                #       str(myCell['ID']) + '\n')
+                    followCell = closed_list[-1]  # Array
 
-                # print(bc.HEADER + 'Open List ' + bc.ENDC, end=': ')
-                # printList(open_list)
+                    if(sortDecendents == []):
+                        print(bc.OKGREEN + "RESET\n" + bc.ENDC)
+                        # resetMatrix(closed_list[-2])
+                        resetMatrix(followCell)
 
-                # print(bc.HEADER + 'Closed List ' + bc.ENDC, end=': ')
-                # printList(closed_list)
+                        # printMatrixExtraInfo()
 
-                newDecendents = getCellsWithOutRestritionOrQueen()
-                # print('New Decendents', getIDs_V2(newDecendents))
-
-                sortDecendents = sortListByFeed(newDecendents)
-                # print('Sort New Decendents', getIDs_V2(sortDecendents))
-
-                # TODO Generate new path and add to current Node, to start.
-                # TODO Validate new path on Closed List
-                # TODO Check if with Have 6 Queens, by length of last item on Closes List
-                # TODO Get ramdon cell with less feed
-
-                listNewsNodes = []
-
-                for decendet in sortDecendents:
-                    b = followCell.copy()
-                    b.append(decendet)
-                    listNewsNodes.append(b)
-
-                candidates = listNewsNodes.copy()[::-1]
-
-                # print(bc.HEADER + 'Candites ' + bc.ENDC, end=': ')
-                # printList(candidates[::-1])
-
-                for cand in candidates:
-                    result = all(elem in cand for elem in open_list)
-                    if (result == False):
-                        open_list.insert(0, cand)
+                    if(len(open_list) > 0):
+                        del open_list[0]
                     else:
-                        print(
-                            'Canditado en lista de abierto, no se tomara en cuanta.......')
+                        print('Open List Empty..... Final')
+                        break
 
-                print(bc.OKGREEN + 'Queens : ' + bc.ENDC, str(queens))
+                    # print(under_green + "Current Cell :" + bc.ENDC + ' ' +
+                    #       str(myCell['ID']) + '\n')
 
-                if(queens == 6):
-                    print(bc.FAIL + "\nCurrent Trajectory :" + bc.ENDC + " ", end='')
-                    print(getIDs_V2(followCell), '\n')
-                    done = True
+                    # print(bc.HEADER + 'Open List ' + bc.ENDC, end=': ')
+                    # printList(open_list)
 
-        elif enter == 'q':
+                    # print(bc.HEADER + 'Closed List ' + bc.ENDC, end=': ')
+                    # printList(closed_list)
+
+                    newDecendents = getCellsWithOutRestritionOrQueen()
+                    # print('New Decendents', getIDs_V2(newDecendents))
+
+                    sortDecendents = sortListByFeed(newDecendents)
+                    # print('Sort New Decendents', getIDs_V2(sortDecendents))
+
+                    # TODO Generate new path and add to current Node, to start.
+                    # TODO Validate new path on Closed List
+                    # TODO Check if with Have 6 Queens, by length of last item on Closes List
+                    # TODO Get ramdon cell with less feed
+
+                    listNewsNodes = []
+
+                    for decendet in sortDecendents:
+                        b = followCell.copy()
+                        b.append(decendet)
+                        listNewsNodes.append(b)
+
+                    candidates = listNewsNodes.copy()[::-1]
+
+                    # print(bc.HEADER + 'Candites ' + bc.ENDC, end=': ')
+                    # printList(candidates[::-1])
+
+                    for cand in candidates:
+                        result = all(elem in cand for elem in open_list)
+                        if (result == False):
+                            open_list.insert(0, cand)
+                        else:
+                            print(
+                                'Canditado en lista de abierto, no se tomara en cuanta.......')
+
+                    print(bc.OKGREEN + 'Queens : ' + bc.ENDC, str(queens))
+
+                    if(queens == 6):
+                        print(bc.FAIL + "\nCurrent Trajectory :" + bc.ENDC + " ", end='')
+                        print(getIDs_V2(followCell), '\n')
+                        done = True
+
+            # elif enter == 'q':
+            #     print(_c.EXIT_MSG)
+            #     break
+        except:
             print(_c.EXIT_MSG)
             break
 
-
+start_time = time.time()
 main()
+print("--- %s seconds ---" % (time.time() - start_time))
