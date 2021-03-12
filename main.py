@@ -68,8 +68,10 @@ def printOpenList():
 
     for item in open_list:
         if(type(item) is list):
+            print('[', end='')
             for i_ in item:
                 print(str(i_['ID']) + ',', end='')
+            print(']', end=',')
         else:
             print(str(item['ID']) + ',', end='')
     print(']')
@@ -230,11 +232,7 @@ def main():
     queens = 0
     showRestrictions = True
 
-    print(_co.bcolors.BOLD + 'ID' + '-' + 'Q' + '-' + 'R' +
-          '-' + 'F' + '-' + _co.bcolors.ENDC, end='| ')
-
     while(1):
-
         print(_co.bcolors.OKCYAN + "\nIteration : " +
               str(iterations) + '\n' + _co.bcolors.ENDC)
 
@@ -259,7 +257,6 @@ def main():
             print('Current Cell', myCell)
 
             closed_list.insert(len(closed_list), open_list[0])
-            # print('\closed_list', closed_list)
 
             currentPos = myCell['POS']
 
@@ -287,12 +284,27 @@ def main():
             newDecendents = getCellsWithOutRestritionOrQueen()
             print('New Decendents', getIDs_V2(newDecendents))
 
-            print('Sort New Decendents', getIDs_V2(sortListByFeed(newDecendents)))
+            sortDecendents = sortListByFeed(newDecendents)
+            print('Sort New Decendents', getIDs_V2(sortDecendents))
 
             # TODO Generate new path and add to current Node, to start.
             # TODO Validate new path on Closed List
             # TODO Check if with Have 6 Queens, by length of last item on Closes List
 
+            listNewsNodes = []
+
+            a = closed_list[-1]  # Array
+            for decendet in sortDecendents:
+                b = a.copy()
+                b.append(decendet)
+                listNewsNodes.append(b)
+
+            bb = listNewsNodes.copy()[::-1]
+
+            for b in bb:
+                open_list.insert(0, b)
+
+            printOpenList()
         elif enter == 'q':
             print(_c.EXIT_MSG)
             break
