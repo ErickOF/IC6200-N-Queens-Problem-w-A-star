@@ -8,6 +8,7 @@ dp = {'F': 0, 'Q': 0, 'R': 0}
 EMPTY_CELL = {'ID': 0, 'POS': (0, 0), **dp}
 
 EXIT_MSG = _co.bcolors.OKBLUE + " Exiting program... " + _co.bcolors.ENDC
+EXIT_MSG_ =  "Press" + _co.bcolors.WARNING + " Enter " + _co.bcolors.ENDC + "to finish. "
 ENTER_MSG = "Press" + _co.bcolors.WARNING + " number " + _co.bcolors.ENDC + "to continue "
 
 EMPTY_MATRIX = [

@@ -1,14 +1,14 @@
-import time
 import numpy as np
+
 import constants as _c
 
 from colors import bcolors as bc
 
-# GLOBAL VARIABLES - remember to use -global-
+# GLOBAL VARIABLES
 matrix = np.array(_c.EMPTY_MATRIX.copy())
 
-open_list = _c.EMPTY_LIST.copy()  # .copy() Prevents mutation
-closed_list = _c.EMPTY_LIST.copy()  # List of Lists
+open_list = _c.EMPTY_LIST.copy()
+closed_list = _c.EMPTY_LIST.copy()
 tentative_routes_list = _c.EMPTY_LIST.copy()
 
 row = -1
@@ -19,14 +19,27 @@ under_green = bc.UNDERLINE + bc.OKGREEN
 # ____ PRINTS ____
 
 
+def printStatus(queens, candidates):
+    print(bc.HEADER + 'Open Set ' + bc.ENDC, end=': ')
+    printList(open_list)
+
+    print(bc.HEADER + 'Closed Set ' + bc.ENDC, end=': ')
+    printList(closed_list)
+
+    print(bc.HEADER + 'Candites ' + bc.ENDC, end=': ')
+    aaaa = candidates.copy()
+    printList(aaaa[::-1])
+
+    print(bc.OKGREEN + 'Queens : ' + bc.ENDC, str(queens))
+
+
 def printMatrixQueens(iterations, showRestrictions=False):
-    print(bc.FAIL +'------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- -------'+ bc.ENDC)
+    print(bc.UNDERLINE + '________________________________________________________________________________________________________' + bc.ENDC)
     print(bc.OKCYAN + "\nIteration : " + str(iterations) + '\n' + bc.ENDC)
 
     if(len(closed_list) > 0):
         print(under_green + "\nPath:" + bc.ENDC + " ", end='')
         print(getIDs_V2(closed_list[-1]), '\n')
-
 
     for i in range(_c.N):
         print('| ', end='')
@@ -38,27 +51,6 @@ def printMatrixQueens(iterations, showRestrictions=False):
                 print(bc.OKGREEN + 'Q ' + bc.ENDC, end='| ')
             else:
                 print('  ', end='| ')
-        print('\n')
-
-
-def printMatrixFeed():
-    print('\n')
-    for i_ in range(_c.N):
-        print('| ', end='')
-        for j in range(_c.N):
-            cell = matrix[i_][j]
-            print(bc.WARNING +
-                  str(cell['F']) + ' ' + bc.ENDC, end='| ')
-        print('\n')
-
-
-def printMatrixExtraInfo():
-    for i in range(_c.N):
-        print('| ', end='')
-        for j in range(_c.N):
-            cell = matrix[i][j]
-            print(bc.BOLD + str(cell['ID']) + '-' + str(cell['Q']) + '-' +
-                  str(cell['R']) + '-' + str(cell['F']) + '-' + bc.ENDC, end='| ')
         print('\n')
 
 
@@ -98,43 +90,25 @@ def resetMatrix(followCell):
                             'F': matrix[i][a]['F'],
                             'Q': 0,
                             'R': 0}
-    # TODO: set news Queens and set Restrictions
-    # print('//////////////////////////////////////////')
-    # printMatrixExtraInfo()
-    # print(getIDs_V2(followCell))
-    # print('//////////////////////////////////////////')
 
     for queen in followCell:
         global row, col
         row = queen['POS'][0]
         col = queen['POS'][1]
 
-        # print('>> ', queen['ID'], ' (', queen['POS']
-        #       [0], ', ', queen['POS'][1], ')')
         setQueen(row, col)
 
-        # printMatrixQueens(True)
-        # print('\n')
-
-        # print('//////////////////////////////////////////')
-
         restrictions = getRestrictions()
-        # print('<><><><><><><><><> >> restrictions : \n', restrictions)
         setRestriction(restrictions)
-
-        # printMatrixQueens(True)
 
 
 # ____ SETS ____
 
-
 def setQueen(x, y):
-    # print('setQueen', end=' ')
     matrix[x][y]['Q'] = 1
 
 
 def setRestriction(restrictions_list=[]):
-    # print('setRestriction', end=' ')
     for i in range(_c.N):
         for j in range(_c.N):
             if(matrix[i][j]['ID'] in restrictions_list):
@@ -142,7 +116,6 @@ def setRestriction(restrictions_list=[]):
 
 
 def setFeed(restrictions_list=[]):
-    # print('setFeed', end=' ')
     for i in range(_c.N):
         for j in range(_c.N):
             if(matrix[i][j]['ID'] in restrictions_list):
@@ -214,269 +187,142 @@ def getEndangeredCells(i, j):
     list_restrictions = diag_1 + diag_2
     return len(list_restrictions)
 
+
 def removeDuplicates(array):
-  return list(dict.fromkeys(array))
+    return list(dict.fromkeys(array))
 
-def getALLRestrictions():
-    list_restrictions = []
-    for i_cell in range(_c.N):
-        for j_cell in range(_c.N):
-            if(matrix[i_cell][j_cell]['Q'] == 1):
-                print('ID <', matrix[i_cell][j_cell]['ID'], '>')
-                cols = getIDs(matrix[:, col])
-                # print('cols > ', cols)
-                rows = getIDs(matrix[row, :])
-                # print('rows > ', rows)
-
-                diagonals = getDiagonals(np.flipud(matrix), (row, col))
-                diag_1 = getIDs(diagonals[0])
-                # print('diag_1 > ', diag_1)
-                diag_2 = getIDs(diagonals[1])
-                # print('diag_2 > ', diag_2)
-
-                list_restrictions = cols + rows + diag_1 + diag_2  # ANALIZAR SUMAS DE ARRAYS
-                # print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']),
-                #       "🚀 list_restrictions", list_restrictions)
-
-                list_restrictions.sort()
-                # print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']), "🚀 list_restrictions.sort()", list_restrictions)
-    #remove repetidos
-    # print('list_restrictions: ', list_restrictions, end='')
-    listWithOutDuplicates = removeDuplicates(list_restrictions)
-    # print('listWithOutDuplicates: ', listWithOutDuplicates, end='')
-
-    return listWithOutDuplicates
 
 def getRestrictions():
     cols = getIDs(matrix[:, col])
-    # print('cols > ', cols)
     rows = getIDs(matrix[row, :])
-    # print('rows > ', rows)
 
     diagonals = getDiagonals(np.flipud(matrix), (row, col))
     diag_1 = getIDs(diagonals[0])
-    # print('diag_1 > ', diag_1)
     diag_2 = getIDs(diagonals[1])
-    # print('diag_2 > ', diag_2)
 
-    list_restrictions = cols + rows + diag_1 + diag_2  # ANALIZAR SUMAS DE ARRAYS
-    # print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']),
-    #       "🚀 list_restrictions", list_restrictions)
-
+    list_restrictions = cols + rows + diag_1 + diag_2
     list_restrictions.sort()
-    # print("🚀🚀🚀🚀" + str(matrix[row][col]['ID']),
-    #       "🚀 list_restrictions.sort()", list_restrictions)
+
     return list_restrictions
 
-
 # ____ SORT ____
+
+
 def sortListByFeed(feedList):
-    # print('sortListByFeed', end=' ')
     feedList.sort(key=lambda x: x['F'])
     return feedList
 
-# ____ ADDS ____
-
-
-def addItemClosesList(closedNode):
-    print('closedNode ', closedNode, end='')
-    closed_list.append(closedNode)
-
-
-def addItemOpenList(newNode):
-    print('newNode ', newNode, end='')
-    open_list.insert(0, newNode)
-
-# ____ VALIDATIONS ____
-
-
-def checkIfExistsOnClosedList():
-    result = all(elem in [8, 9, 4, 6, 5, 1] for elem in [1, 5, 4, 6, 8, 9])
-    if result:
-        print('Yes, list1 contains all elements in list2', end='')
-        return True
-    else:
-        print('No, list1 does not contains all elements in list2', end='')
-        return False
 
 # ____ MAIN ____
 
 
 def main():
-    iterations = 0
     queens = 0
-    showRestrictions = True
+    iterations = 0
+    soluctions = 0
+
     sortDecendents = [0]
     followCell = {}
     done = False
 
+    # False | True
+    showRestrictions = True
+    show4Soluctions = True
+    showSets = False
+
     printMatrixQueens(iterations, showRestrictions)
 
-    print(bc.HEADER + 'Open Set ' + bc.ENDC, end=': ')
-    printList(open_list)
-
-    print(bc.HEADER + 'Closed Set ' + bc.ENDC, end=': ')
-    printList(closed_list)    
-
-    print(bc.HEADER + 'Candites ' + bc.ENDC, end=': ')
-    printList([])    
-
-
+    printStatus(queens, [])
 
     while(done == False):
-        # print(bc.OKCYAN + "\nIteration : " + str(iterations) + '\n' + bc.ENDC)
+        try:
+            iterations_loop = int(input(_c.ENTER_MSG))
 
+            if(type(iterations_loop) == int):
 
-        enter = input(_c.ENTER_MSG)
+                while(iterations_loop > 0):
 
-        if enter == '':
+                    iterations += 1
+                    iterations_loop -= 1
 
-            iterations_loop = 100
-            while(iterations_loop>=0 and done == False):
-                iterations_loop -= 1
-                # if(sortDecendents == []):
-                #     print(bc.OKGREEN + "RESET\n" + bc.ENDC)
-                #     # resetMatrix(closed_list[-2])
-                #     resetMatrix(followCell)
+                    if(len(open_list) == 0):
+                        list_without_RQ = getCellsWithOutRestritionOrQueen()
 
-                #     # printMatrixExtraInfo()
+                        list_Ids = getIDs_V2(list_without_RQ)
+                        setFeed(list_Ids)
 
-                iterations += 1
-                list_without_RQ = getCellsWithOutRestritionOrQueen()  # Step 1
+                        for itemSorted in sortListByFeed(list_without_RQ):
+                            open_list.insert(len(open_list), [itemSorted])
 
-                # print('list_without_RQ', list_without_RQ, end='\n\n')
+                    myCell = open_list[0][-1]
 
-                list_Ids = getIDs_V2(list_without_RQ)
+                    queens = len(open_list[0])
 
-                # print('list_Ids', list_Ids, end='\n\n')
+                    closed_list.insert(len(closed_list), open_list[0])
 
-                setFeed(list_Ids)  # Step 2
+                    currentPos = myCell['POS']
 
-                s = sortListByFeed(list_without_RQ)
+                    global row, col
+                    row = currentPos[0]
+                    col = currentPos[1]
 
-                # print('s', s, end='\n\n')
+                    followCell = closed_list[-1]
 
-                # printMatrixFeed()
+                    if(sortDecendents == []):
+                        resetMatrix(followCell)
+                    else:
+                        resetMatrix(open_list[0])
 
-                if(len(open_list) == 0):
-                    for a in s:
-                        open_list.insert(len(open_list), [a])
+                    if(len(open_list) > 0):
+                        del open_list[0]
 
-                myCell = open_list[0][-1]
+                    # printMatrixQueens(iterations, showRestrictions)
 
-                queens = len(open_list[0])
+                    newDecendents = getCellsWithOutRestritionOrQueen()
 
-                closed_list.insert(len(closed_list), open_list[0])
+                    sortDecendents = sortListByFeed(newDecendents)
 
-                currentPos = myCell['POS']
+                    # TODO Get ramdon cell with less feed
 
+                    listNewsNodes = []
 
-                global row, col
-                row = currentPos[0]
-                col = currentPos[1]
+                    for decendet in sortDecendents:
+                        b = followCell.copy()
+                        b.append(decendet)
+                        isNew = True
+                        for aClosed in closed_list:
+                            if(sorted(getIDs_V2(b)) == sorted(getIDs_V2(aClosed))):
+                                isNew = False
+                                break
 
-                # setQueen(row, col)
+                        if(isNew):
+                            listNewsNodes.append(b)
 
-                # restrictions = getRestrictions()
-                # setRestriction(restrictions)
+                    candidates = listNewsNodes.copy()[::-1]
 
-                # printMatrixExtraInfo()
-                # printMatrixFeed()
+                    if(showSets):
+                        printStatus(queens, candidates)
 
-                # print(under_green + "\nCurrent Trajectory :" + bc.ENDC + " ", end='')
-                # print(getIDs_V2(open_list[0]), '\n')
+                    for cand in candidates:
+                        open_list.insert(0, cand)
 
+                    if(queens >= 6):
+                        soluctions += 1
+                        print(bc.OKCYAN + "\nCurrent Trajectory : " +
+                              bc.ENDC, end='')
+                        print(getIDs_V2(followCell), '\n')
+                        print('Final Iteration', iterations, '\n')
 
-                followCell = closed_list[-1]  # Array
-
-                if(sortDecendents == []):
-                    print(bc.OKGREEN + "RESET\n" + bc.ENDC)
-                    resetMatrix(followCell)
-                else:
-                    resetMatrix(open_list[0])
-
-
-                if(len(open_list) > 0):
-                    del open_list[0]
-                else:
-                    print('Open Set Empty..... Final')
-                    break
-
-                printMatrixQueens(iterations, showRestrictions)
-
-                # print(under_green + "Current Cell :" + bc.ENDC + ' ' +
-                #       str(myCell['ID']) + '\n')
-
-                print(bc.HEADER + 'Open Set ' + bc.ENDC, end=': ')
-                printList(open_list)
-
-                print(bc.HEADER + 'Closed Set ' + bc.ENDC, end=': ')
-                printList(closed_list)
-
-                newDecendents = getCellsWithOutRestritionOrQueen()
-                # print('New Decendents', getIDs_V2(newDecendents))
-
-                sortDecendents = sortListByFeed(newDecendents)
-                # print('Sort New Decendents', getIDs_V2(sortDecendents))
-
-                # TODO Generate new path and add to current Node, to start.
-                # TODO Validate new path on Closed List
-                # TODO Check if with Have 6 Queens, by length of last item on Closes List
-                # TODO Get ramdon cell with less feed
-
-                # listNewsNodes = []
-
-                # for decendet in sortDecendents:
-                #     b = followCell.copy()
-                #     b.append(decendet)
-                #     listNewsNodes.append(b)
-
-                # candidates = listNewsNodes.copy()[::-1]
-
-                listNewsNodes = []
-
-                for decendet in sortDecendents:
-                    b = followCell.copy()
-                    b.append(decendet)
-                    isNew = True
-                    for aClosed in closed_list:
-                        if(sorted(getIDs_V2(b)) == sorted(getIDs_V2(aClosed))):
-                            isNew = False
+                        printMatrixQueens(iterations, showRestrictions)
+                        if(soluctions == 4 or show4Soluctions == False):
+                            done = True
                             break
 
-                    if(isNew):
-                        listNewsNodes.append(b)
+        except:
+            enter_exit = input(_c.EXIT_MSG_)
+            if(enter_exit == ''):
+                print(_c.EXIT_MSG)
+                break
 
 
-                    b = []
-
-                candidates = listNewsNodes.copy()[::-1]
-
-                print(bc.HEADER + 'Candites ' + bc.ENDC, end=': ')
-                aaaa = candidates.copy()
-                printList(aaaa[::-1])
-
-                for cand in candidates:
-                    result = all(elem in cand for elem in open_list)
-                    if (result == False):
-                        open_list.insert(0, cand)
-                    else:
-                        print(
-                            'Canditado en lista de abierto, no se tomara en cuanta.......')
-
-                print(bc.OKGREEN + 'Queens : ' + bc.ENDC, str(queens))
-
-                if(queens == 6):
-                    print(bc.OKCYAN + "\nCurrent Trajectory : " + bc.ENDC, end='')
-                    print(getIDs_V2(followCell), '\n')
-                    print('Final Iteration', iterations)
-                    done = True
-
-        elif enter == 'q':
-            print(_c.EXIT_MSG)
-            break
-
-
-start_time = time.time()
 main()
-print("--- %s seconds ---" % (time.time() - start_time))
