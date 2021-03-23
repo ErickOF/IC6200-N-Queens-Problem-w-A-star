@@ -4,6 +4,14 @@ N-Queens Problem solved using A* algorithm
 # Required
 numpy : https://numpy.org/install/
 
+# Run
+python3 main.py 
+
+- How man soluction Do you want find?  (1-4) : 
+- Do you want show sets? (T/t): True or (f) False? 
+- Press number to continue - Loop
+- Press Enter to finish. - ErrorLoop
+
 -----------------------------------
 # Element props
 ```python
