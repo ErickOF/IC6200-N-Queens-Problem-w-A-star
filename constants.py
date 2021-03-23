@@ -11,6 +11,10 @@ EXIT_MSG = _co.bcolors.OKBLUE + " Exiting program... " + _co.bcolors.ENDC
 EXIT_MSG_ =  "Press" + _co.bcolors.WARNING + " Enter " + _co.bcolors.ENDC + "to finish. "
 ENTER_MSG = "Press" + _co.bcolors.WARNING + " number " + _co.bcolors.ENDC + "to continue "
 
+INPUT_SOLUCTIONS = _co.bcolors.OKBLUE + "How man soluction Do you want find? " + _co.bcolors.ENDC + " (1" + _co.bcolors.OKBLUE + "-" + _co.bcolors.ENDC + "4) : "
+INPUT_SETS = _co.bcolors.OKBLUE + "\nDo you want show sets? " + _co.bcolors.ENDC + "(T" + _co.bcolors.OKBLUE + "/" + _co.bcolors.ENDC + "t): True or (f) False? "
+ERROR_14 = _co.bcolors.WARNING + "Error, please 1-4!" + _co.bcolors.ENDC
+
 EMPTY_MATRIX = [
     [{'ID': 1, 'POS': (0, 0), **dp }, {'ID': 2, 'POS': (0, 1), **dp }, {'ID': 3, 'POS': (0, 2), **dp }, {'ID': 4, 'POS': (0, 3), **dp }, {'ID': 5, 'POS': (0, 4), **dp }, {'ID': 6, 'POS': (0, 5), **dp }],
     [{'ID': 7, 'POS': (1, 0), **dp }, {'ID': 8, 'POS': (1, 1), **dp }, {'ID': 9, 'POS': (1, 2), **dp }, {'ID': 10, 'POS': (1, 3), **dp }, {'ID': 11, 'POS': (1, 4), **dp }, {'ID': 12, 'POS': (1, 5), **dp }],

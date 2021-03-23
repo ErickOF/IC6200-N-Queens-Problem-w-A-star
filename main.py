@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 
 import constants as _c
@@ -213,6 +215,37 @@ def sortListByFeed(feedList):
     return feedList
 
 
+def unsort(auxList):
+    return random.sample(auxList, len(auxList))
+
+
+def splitArray(allitems):
+    x = allitems
+    arrays = []
+    maxFeed = 100
+    temp_array = []
+
+    urlist_len = len(x)-1
+
+    for a in x:
+        currentFeed = a['F']
+        if currentFeed <= maxFeed:
+            temp_array.append(a)
+            maxFeed = currentFeed
+        else:
+            arrays.append(temp_array)
+            maxFeed = currentFeed
+            temp_array = []
+            temp_array.append(a)
+        if x.index(a) == urlist_len:
+            arrays.append(temp_array)
+
+    lastArrayUnsorted = []
+    for iii in arrays:
+        lastArrayUnsorted.extend(unsort(iii))
+
+    return lastArrayUnsorted
+
 # ____ MAIN ____
 
 
@@ -220,6 +253,7 @@ def main():
     queens = 0
     iterations = 0
     soluctions = 0
+    finalSoluctions = 1
 
     sortDecendents = [0]
     followCell = {}
@@ -227,8 +261,24 @@ def main():
 
     # False | True
     showRestrictions = True
-    show4Soluctions = True
-    showSets = False
+    showSets = True
+    inputNumber = True
+
+    while inputNumber:
+        try:
+            finalSoluctions = int(input(_c.INPUT_SOLUCTIONS))
+
+            if finalSoluctions < 5 and finalSoluctions > 0:
+               inputNumber = False
+            else:
+                print(_c.ERROR_14)
+
+        except:
+            print(_c.ERROR_14)
+
+    input_ = input(_c.INPUT_SETS)
+    if input_ == "f":
+        showSets = False
 
     printMatrixQueens(iterations, showRestrictions)
 
@@ -251,7 +301,10 @@ def main():
                         list_Ids = getIDs_V2(list_without_RQ)
                         setFeed(list_Ids)
 
-                        for itemSorted in sortListByFeed(list_without_RQ):
+                        itemWithFeed = sortListByFeed(list_without_RQ)
+                        itemWithFeed_RANDOM = splitArray(list_without_RQ)
+
+                        for itemSorted in itemWithFeed_RANDOM:  # itemWithFeed_RANDOM | itemWithFeed:
                             open_list.insert(len(open_list), [itemSorted])
 
                     myCell = open_list[0][-1]
@@ -276,7 +329,8 @@ def main():
                     if(len(open_list) > 0):
                         del open_list[0]
 
-                    # printMatrixQueens(iterations, showRestrictions)
+                    if(showSets):
+                        printMatrixQueens(iterations, showRestrictions)
 
                     newDecendents = getCellsWithOutRestritionOrQueen()
 
@@ -314,7 +368,7 @@ def main():
                         print('Final Iteration', iterations, '\n')
 
                         printMatrixQueens(iterations, showRestrictions)
-                        if(soluctions == 4 or show4Soluctions == False):
+                        if(soluctions == finalSoluctions):
                             done = True
                             break
 
