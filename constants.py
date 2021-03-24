@@ -9,10 +9,10 @@ EMPTY_CELL = {'ID': 0, 'POS': (0, 0), **dp}
 
 EXIT_MSG = _co.bcolors.OKBLUE + " Exiting program... " + _co.bcolors.ENDC
 EXIT_MSG_ =  "Press" + _co.bcolors.WARNING + " Enter " + _co.bcolors.ENDC + "to finish. "
-ENTER_MSG = "Press" + _co.bcolors.WARNING + " number " + _co.bcolors.ENDC + "to continue "
+ENTER_MSG = "Please enter" + _co.bcolors.WARNING + " the amount of iterations " + _co.bcolors.ENDC + "you want to run : "
 
-INPUT_SOLUCTIONS = _co.bcolors.OKBLUE + "How man soluction Do you want find? " + _co.bcolors.ENDC + " (1" + _co.bcolors.OKBLUE + "-" + _co.bcolors.ENDC + "4) : "
-INPUT_SETS = _co.bcolors.OKBLUE + "\nDo you want show sets? " + _co.bcolors.ENDC + "(T" + _co.bcolors.OKBLUE + "/" + _co.bcolors.ENDC + "t): True or (f) False? "
+INPUT_SOLUCTIONS = _co.bcolors.OKBLUE + "How many solutions do you want to find? " + _co.bcolors.ENDC + " (1" + _co.bcolors.OKBLUE + "-" + _co.bcolors.ENDC + "4) : "
+INPUT_SETS = _co.bcolors.OKBLUE + "\nDo you wanna show sets? " + _co.bcolors.ENDC + "(T" + _co.bcolors.OKBLUE + "/" + _co.bcolors.ENDC + "t): True or (f) False? "
 ERROR_14 = _co.bcolors.WARNING + "Error, please 1-4!" + _co.bcolors.ENDC
 
 EMPTY_MATRIX = [

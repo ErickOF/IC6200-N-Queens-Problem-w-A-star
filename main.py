@@ -11,7 +11,6 @@ matrix = np.array(_c.EMPTY_MATRIX.copy())
 
 open_list = _c.EMPTY_LIST.copy()
 closed_list = _c.EMPTY_LIST.copy()
-tentative_routes_list = _c.EMPTY_LIST.copy()
 
 row = -1
 col = -1
@@ -20,7 +19,6 @@ under_green = bc.UNDERLINE + bc.OKGREEN
 
 # ____ PRINTS ____
 
-
 def printStatus(queens, candidates):
     print(bc.HEADER + 'Open Set ' + bc.ENDC, end=': ')
     printList(open_list)
@@ -28,7 +26,7 @@ def printStatus(queens, candidates):
     print(bc.HEADER + 'Closed Set ' + bc.ENDC, end=': ')
     printList(closed_list)
 
-    print(bc.HEADER + 'Candites ' + bc.ENDC, end=': ')
+    print(bc.HEADER + 'Candidates ' + bc.ENDC, end=': ')
     aaaa = candidates.copy()
     printList(aaaa[::-1])
 
@@ -125,6 +123,13 @@ def setFeed(restrictions_list=[]):
                 length = getEndangeredCells(pos[0], pos[1])
                 # print('ID> ', matrix[i][j]['ID'], ' [', length, ']')
                 matrix[i][j]['F'] = length
+
+def printFeeds():
+    for i in range(_c.N):
+        for j in range(_c.N):
+            print('|', matrix[i][j]['F'], end='')
+        print('|')
+    
 
 # ____ GETS ____
 
@@ -300,6 +305,8 @@ def main():
 
                         list_Ids = getIDs_V2(list_without_RQ)
                         setFeed(list_Ids)
+
+                        # printFeeds()
 
                         itemWithFeed = sortListByFeed(list_without_RQ)
                         itemWithFeed_RANDOM = splitArray(list_without_RQ)

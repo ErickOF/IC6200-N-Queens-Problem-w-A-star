@@ -26,7 +26,7 @@ def printStatus(queens, candidates):
     print(bc.HEADER + 'Closed Set ' + bc.ENDC, end=': ')
     printList(closed_list)
 
-    print(bc.HEADER + 'Candites ' + bc.ENDC, end=': ')
+    print(bc.HEADER + 'Candidates ' + bc.ENDC, end=': ')
     aaaa = candidates.copy()
     printList(aaaa[::-1])
 
